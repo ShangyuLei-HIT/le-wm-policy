@@ -1,0 +1,6 @@
+name: predictor
+output_model_name: lewm
+subdir: null
+pretrained_world_model: null
+pretrained_search_pattern: null
+use_policy_generator: false

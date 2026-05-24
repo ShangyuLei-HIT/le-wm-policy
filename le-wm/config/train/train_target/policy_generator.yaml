@@ -1,0 +1,6 @@
+name: policy_generator
+output_model_name: lewm_policy
+subdir: null
+pretrained_world_model: auto
+pretrained_search_pattern: lewm_epoch_*_object.ckpt
+use_policy_generator: true
