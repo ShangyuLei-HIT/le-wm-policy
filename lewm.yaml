@@ -1,0 +1,79 @@
+defaults:
+  - _self_
+  - data: pusht
+  - train_target: predictor
+
+output_model_name: ${train_target.output_model_name}
+subdir: ${train_target.subdir}
+pretrained_world_model: ${train_target.pretrained_world_model}
+pretrained_search_pattern: ${train_target.pretrained_search_pattern}
+use_policy_generator: ${train_target.use_policy_generator}
+
+num_workers: 6
+train_split: 0.9
+seed: 3072
+img_size: 224
+patch_size: 14
+encoder_scale: tiny
+dump_object: True
+
+trainer:
+  max_epochs: 3
+  devices: auto
+  accelerator: gpu
+  precision: bf16
+  gradient_clip_val: 1.0
+  limit_val_batches: 100
+
+loader:
+  batch_size: 128
+  num_workers: ${num_workers}
+  persistent_workers: True
+  prefetch_factor: 3
+  pin_memory: True
+
+optimizer:
+  type: AdamW
+  lr: 5e-5
+  weight_decay: 1e-3
+
+wandb:
+  enabled: True
+  config:
+    entity: 1424074336-hit
+    project: lewm-DP
+    name: ${output_model_name}
+    id: ${subdir}
+    resume: allow
+    log_model: False
+
+wm:
+  type: lewm
+  history_size: 3
+  num_preds: 1
+  embed_dim: 192
+
+predictor:
+  depth: 6
+  heads: 16
+  mlp_dim: 2048
+  dim_head: 64
+  dropout: 0.1
+  emb_dropout: 0.0
+
+policy_generator:
+  # Default to the same DiT size as the world predictor:
+  # both operate in the same latent width and use the same training objective.
+  depth: 4
+  heads: 6
+  mlp_dim: 1024
+  dim_head: 64
+  dropout: 0.1
+  emb_dropout: 0.0
+
+loss:
+  sigreg:
+    weight: 0.09
+    kwargs:
+      knots: 17
+      num_proj: 1024
