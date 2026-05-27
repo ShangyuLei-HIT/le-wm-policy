@@ -23,6 +23,7 @@ trainer:
   accelerator: gpu
   precision: bf16
   gradient_clip_val: 1.0
+  limit_val_batches: 100
 
 loader:
   batch_size: 128
@@ -63,9 +64,9 @@ predictor:
 policy_generator:
   # Default to the same DiT size as the world predictor:
   # both operate in the same latent width and use the same training objective.
-  depth: 6
-  heads: 16
-  mlp_dim: 2048
+  depth: 4
+  heads: 6
+  mlp_dim: 1024
   dim_head: 64
   dropout: 0.1
   emb_dropout: 0.0
